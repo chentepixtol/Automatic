@@ -7,6 +7,6 @@ require_once 'vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Automatic' => 'src/',
-    'Test\Unit'  => realpath('.'),
+    'Test'  => realpath('.'),
 ));
 $loader->register();

@@ -1,5 +1,5 @@
 <phpunit 
-    verbose="true">
+    verbose="true" bootstrap="autoload.php">
    <filter>
     <blacklist>
       <directory suffix=".php">vendor</directory>
