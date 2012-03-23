@@ -84,5 +84,28 @@ class Machine
         return in_array($conditionKey, $this->getValidConditionKeys($changeable));
     }
 
+    /**
+     *
+     * @param Changeable $changeable
+     * @param mixed $conditionKey
+     * @return boolean
+     */
+    public function isCappable(Changeable $changeable, $conditionKey)
+    {
+        if( !$this->isValidCondition($changeable, $conditionKey) ){
+            return false;
+        }
+
+        $transition = $this->transitionCollection->get($changeable->getStateKey(), $conditionKey);
+        foreach( $transition->getGuards() as $guard ){
+            /* @var $guard \Automatic\Guard */
+            if( !$guard->isSafe($changeable) ){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 }

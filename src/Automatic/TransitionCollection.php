@@ -57,6 +57,16 @@ class TransitionCollection extends \ArrayIterator
     }
 
     /**
+     *
+     * @param array $transitions
+     */
+    public function appendFromArray($transitions){
+        foreach ($transitions as $transition){
+            $this->append($transition);
+        }
+    }
+
+    /**
      * Return current array entry
      * @return Transition
      */
@@ -303,6 +313,19 @@ class TransitionCollection extends \ArrayIterator
         return $this->filter(function(Transition $transition) use($stateKey){
             return $transition->getCurrentState()->getKey() == $stateKey;
         });
+    }
+
+    /**
+     *
+     * @param mixed $stateKey
+     * @param mixed $conditionKey
+     * @return \Automatic\Transition
+     */
+    public function get($currentStateKey, $conditionKey){
+        return $this->filter(function(Transition $transition) use($currentStateKey, $conditionKey){
+            return $transition->getCurrentState()->getKey() == $currentStateKey &&
+            $transition->getCondition()->getKey() == $conditionKey;
+        })->getOne();
     }
 
     /**

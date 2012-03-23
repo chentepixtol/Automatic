@@ -8,12 +8,19 @@ class Item implements Changeable{
 
     private $state;
 
-    public function __construct($state){
+    private $name;
+
+    public function __construct($state, $name = ''){
         $this->state = $state;
+        $this->name = $name;
     }
 
     public function getStateKey(){
         return $this->state;
+    }
+
+    public function getName(){
+        return $this->name;
     }
 
 }

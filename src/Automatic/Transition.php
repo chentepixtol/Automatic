@@ -30,14 +30,22 @@ class Transition
 
     /**
      *
+     * @var array
+     */
+    private $guards;
+
+    /**
+     *
      * @param StateInterface $currentState
      * @param Condition $condition
      * @param StateInterface $nextState
+     * @param array $guards
      */
-    public function __construct(StateInterface $currentState, ConditionInterface $condition, StateInterface $nextState){
+    public function __construct(StateInterface $currentState, ConditionInterface $condition, StateInterface $nextState, $guards = array()){
         $this->currentState = $currentState;
         $this->condition = $condition;
         $this->nextState = $nextState;
+        $this->guards = $guards;
     }
 
     /**
@@ -72,4 +80,11 @@ class Transition
         return $this->condition;
     }
 
+    /**
+     *
+     * @return array
+     */
+    public function getGuards(){
+        return $this->guards;
+    }
 }
