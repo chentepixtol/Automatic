@@ -18,10 +18,23 @@ class Machine
 
     /**
      *
+     * @var Handler
+     */
+    private $successHandler;
+
+    /**
+     *
+     * @var string
+     */
+    private $lastError;
+
+    /**
+     *
      * @param TransitionCollection $transitionCollection
      */
-    public function __construct(TransitionCollection $transitionCollection){
+    public function __construct(TransitionCollection $transitionCollection, Handler $successHandler = null){
         $this->transitionCollection = $transitionCollection;
+        $this->successHandler = ( null == $successHandler )? new NullHandler() : $successHandler;
     }
 
     /**
@@ -93,6 +106,8 @@ class Machine
     public function isCappable(Changeable $changeable, $conditionKey)
     {
         if( !$this->isValidCondition($changeable, $conditionKey) ){
+            $this->lastError = "The transition from " . $changeable->getStateKey().
+                " with condition " .$conditionKey  . " not exists";
             return false;
         }
 
@@ -100,6 +115,7 @@ class Machine
         foreach( $transition->getGuards() as $guard ){
             /* @var $guard \Automatic\Guard */
             if( !$guard->isSafe($changeable) ){
+                $this->lastError = $guard->getLastError();
                 return false;
             }
         }
@@ -112,9 +128,13 @@ class Machine
      * @param Changeable $changeable
      * @param mixed $conditionKey
      */
-    public function handle(Changeable $changeable, $conditionKey)
+    public function handle(Changeable $changeable, $conditionKey, $variables = array())
     {
-
+        if( !$this->isCappable($changeable, $conditionKey) ){
+            throw new AutomataException($this->lastError);
+        }
+        $transition = $this->transitionCollection->get($changeable->getStateKey(), $conditionKey);
+        $this->successHandler->apply($changeable, $transition, $variables);
     }
 
 

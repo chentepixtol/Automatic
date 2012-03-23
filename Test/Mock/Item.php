@@ -15,6 +15,10 @@ class Item implements Changeable{
         $this->name = $name;
     }
 
+    public function setStateKey($stateKey){
+        $this->state = $stateKey;
+    }
+
     public function getStateKey(){
         return $this->state;
     }

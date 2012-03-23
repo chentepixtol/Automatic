@@ -8,6 +8,7 @@ namespace Test\Unit;
  * @author chente
  *
  */
+use Test\Mock\ChangeStatusHandler;
 use Test\Mock\Guard;
 use Automatic\TransitionCollection;
 use Test\Mock\Item;
@@ -52,7 +53,6 @@ class GuardTest extends BaseTest
         $prestado = new State(self::PRESTADO, "Prestado");
         $comprado = new State(self::COMPRADO, "Comprado");
 
-
         $guards = array(new Guard\OnlyBook());
         $transitions = new TransitionCollection();
         $transitions->appendFromArray(array(
@@ -60,7 +60,7 @@ class GuardTest extends BaseTest
             new Transition($estante, $comprar, $comprado),
             new Transition($prestado, $devolver, $estante),
         ));
-        $this->machine = new Machine($transitions);
+        $this->machine = new Machine($transitions, new ChangeStatusHandler());
     }
 
     /**
@@ -73,13 +73,26 @@ class GuardTest extends BaseTest
     }
 
     /**
-     *
+     * @test
      */
     public function handle(){
         $item = new Item(self::ESTANTE, "Book");
+
         $this->machine->handle($item, self::PRESTAR);
         $this->assertEquals(self::PRESTADO, $item->getStateKey());
+
+        $this->machine->handle($item, self::DEVOLVER);
+        $this->assertEquals(self::ESTANTE, $item->getStateKey());
     }
 
+    /**
+     * @test
+     * @expectedException \Automatic\AutomataException
+     */
+    public function handleError(){
+        $item = new Item(self::ESTANTE, "Magazine");
+
+        $this->machine->handle($item, self::PRESTAR);
+    }
 }
 
