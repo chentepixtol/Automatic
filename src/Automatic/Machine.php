@@ -107,5 +107,15 @@ class Machine
         return true;
     }
 
+    /**
+     *
+     * @param Changeable $changeable
+     * @param mixed $conditionKey
+     */
+    public function handle(Changeable $changeable, $conditionKey)
+    {
+
+    }
+
 
 }

@@ -12,19 +12,19 @@ class Transition
 
     /**
      *
-     * @var StateInterface
+     * @var State
      */
     private $currentState;
 
     /**
      *
-     * @var ConditionInterface
+     * @var Condition
      */
     private $condition;
 
     /**
      *
-     * @var StateInterface
+     * @var State
      */
     private $nextState;
 
@@ -36,12 +36,12 @@ class Transition
 
     /**
      *
-     * @param StateInterface $currentState
+     * @param State $currentState
      * @param Condition $condition
-     * @param StateInterface $nextState
+     * @param State $nextState
      * @param array $guards
      */
-    public function __construct(StateInterface $currentState, ConditionInterface $condition, StateInterface $nextState, $guards = array()){
+    public function __construct(State $currentState, Condition $condition, State $nextState, $guards = array()){
         $this->currentState = $currentState;
         $this->condition = $condition;
         $this->nextState = $nextState;
@@ -58,7 +58,7 @@ class Transition
 
     /**
      *
-     * @return \Automatic\StateInterface
+     * @return \Automatic\State
      */
     public function getCurrentState(){
         return $this->currentState;
@@ -66,7 +66,7 @@ class Transition
 
     /**
      *
-     * @return \Automatic\StateInterface
+     * @return \Automatic\State
      */
     public function getNextState(){
         return $this->nextState;
@@ -74,7 +74,7 @@ class Transition
 
     /**
      *
-     * @return \Automatic\ConditionInterface
+     * @return \Automatic\Condition
      */
     public function getCondition(){
         return $this->condition;

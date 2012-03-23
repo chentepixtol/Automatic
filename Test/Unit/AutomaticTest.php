@@ -12,8 +12,8 @@ use Automatic\TransitionCollection;
 
 use Test\Mock\Item;
 
-use Automatic\Condition;
-use Automatic\State;
+use Test\Mock\Condition;
+use Test\Mock\State;
 use Automatic\Transition;
 use Automatic\Machine;
 

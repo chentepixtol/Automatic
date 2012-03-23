@@ -11,28 +11,46 @@ namespace Test\Unit;
 use Test\Mock\Guard;
 use Automatic\TransitionCollection;
 use Test\Mock\Item;
-use Automatic\Condition;
-use Automatic\State;
+use Test\Mock\Condition;
+use Test\Mock\State;
 use Automatic\Transition;
 use Automatic\Machine;
 
 class GuardTest extends BaseTest
 {
+    /**
+     *
+     * Conditions
+     */
+    const PRESTAR = 1;
+    const COMPRAR = 2;
+    const DEVOLVER = 3;
 
     /**
-     * @test
+     *
+     * Status
      */
-    public function guards(){
+    const ESTANTE = 1;
+    const PRESTADO = 2;
+    const COMPRADO = 3;
 
+    private $machine;
+
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
+    public function setUp()
+    {
         // conditions
-        $prestar = new Condition(1, "Prestar");
-        $comprar = new Condition(2, "Comprar");
-        $devolver = new Condition(3, "Devolver");
+        $prestar = new Condition(self::PRESTAR, "Prestar");
+        $comprar = new Condition(self::COMPRAR, "Comprar");
+        $devolver = new Condition(self::DEVOLVER, "Devolver");
 
         // status
-        $estante = new State(1, "Estante");
-        $prestado = new State(2, "Prestado");
-        $comprado = new State(3, "Comprado");
+        $estante = new State(self::ESTANTE, "Estante");
+        $prestado = new State(self::PRESTADO, "Prestado");
+        $comprado = new State(self::COMPRADO, "Comprado");
 
 
         $guards = array(new Guard\OnlyBook());
@@ -42,10 +60,25 @@ class GuardTest extends BaseTest
             new Transition($estante, $comprar, $comprado),
             new Transition($prestado, $devolver, $estante),
         ));
-        $machine = new Machine($transitions);
+        $this->machine = new Machine($transitions);
+    }
 
-        $this->assertTrue($machine->isCappable(new Item(1, "Book"), $prestar->getKey()));
-        $this->assertFalse($machine->isCappable(new Item(1, "Magazine"), $prestar->getKey()));
+    /**
+     * @test
+     */
+    public function guards()
+    {
+        $this->assertTrue($this->machine->isCappable(new Item(self::ESTANTE, "Book"), self::PRESTAR));
+        $this->assertFalse($this->machine->isCappable(new Item(self::ESTANTE, "Magazine"), self::PRESTAR));
+    }
+
+    /**
+     *
+     */
+    public function handle(){
+        $item = new Item(self::ESTANTE, "Book");
+        $this->machine->handle($item, self::PRESTAR);
+        $this->assertEquals(self::PRESTADO, $item->getStateKey());
     }
 
 }
