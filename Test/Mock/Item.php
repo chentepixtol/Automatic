@@ -2,9 +2,9 @@
 
 namespace Test\Mock;
 
-use Automatic\Changeable;
+use Automatic\Automatable;
 
-class Item implements Changeable{
+class Item implements Automatable{
 
     private $state;
 

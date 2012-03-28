@@ -4,7 +4,7 @@ namespace Test\Mock;
 
 use Automatic\Transition;
 
-use Automatic\Changeable;
+use Automatic\Automatable;
 use Automatic\Handler;
 
 /**
@@ -18,10 +18,10 @@ class ChangeStatusHandler implements Handler{
      * (non-PHPdoc)
      * @see Automatic.Handler::apply()
      */
-    public function apply(Changeable $changeable, Transition $transition, $variables = array()){
-        if( $changeable instanceof Item ){
+    public function apply(Automatable $automatable, Transition $transition, $variables = array()){
+        if( $automatable instanceof Item ){
             $nextState = $transition->getNextState()->getKey();
-            $changeable->setStateKey($nextState);
+            $automatable->setStateKey($nextState);
         }
     }
 

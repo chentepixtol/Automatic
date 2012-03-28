@@ -4,7 +4,7 @@ namespace Test\Mock\Guard;
 
 use Test\Mock\Item;
 
-use Automatic\Changeable;
+use Automatic\Automatable;
 
 use Automatic\Guard;
 
@@ -20,12 +20,12 @@ class OnlyBook implements Guard
      * (non-PHPdoc)
      * @see Automatic.Guard::isSafe()
      */
-    public function isSafe(Changeable $changeable){
-        if( !$changeable instanceof Item ){
+    public function isSafe(Automatable $automatable){
+        if( !$automatable instanceof Item ){
             return true;
         }
 
-        if( $changeable->getName() == "Book" ){
+        if( $automatable->getName() == "Book" ){
             return true;
         }
 

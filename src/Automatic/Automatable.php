@@ -6,7 +6,7 @@ namespace Automatic;
  *
  * @author chente
  */
-interface Changeable
+interface Automatable
 {
 
     /**

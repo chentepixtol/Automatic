@@ -12,10 +12,10 @@ interface Guard
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @return boolean
      */
-    function isSafe(Changeable $changeable);
+    function isSafe(Automatable $automatable);
 
     /**
      * @return string

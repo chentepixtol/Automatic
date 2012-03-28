@@ -39,82 +39,82 @@ class Machine
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @return array
      */
-    public function getNextStates(Changeable $changeable){
+    public function getNextStates(Automatable $automatable){
         return $this->transitionCollection
-            ->filterByCurrentStateKey($changeable->getStateKey())
+            ->filterByCurrentStateKey($automatable->getStateKey())
             ->getNextStates();
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @return array
      */
-    public function getNextStateKeys(Changeable $changeable){
-        return array_keys($this->getNextStates($changeable));
+    public function getNextStateKeys(Automatable $automatable){
+        return array_keys($this->getNextStates($automatable));
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @param mixed $stateKey
      * @return boolean
      */
-    public function isValidNextState(Changeable $changeable, $stateKey){
-        return in_array($stateKey, $this->getNextStateKeys($changeable));
+    public function isValidNextState(Automatable $automatable, $stateKey){
+        return in_array($stateKey, $this->getNextStateKeys($automatable));
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @return array
      */
-    public function getValidConditions(Changeable $changeable){
+    public function getValidConditions(Automatable $automatable){
         return $this->transitionCollection
-            ->filterByCurrentStateKey($changeable->getStateKey())
+            ->filterByCurrentStateKey($automatable->getStateKey())
             ->getConditions();
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @return array
      */
-    public function getValidConditionKeys(Changeable $changeable){
-        return array_keys($this->getValidConditions($changeable));
+    public function getValidConditionKeys(Automatable $automatable){
+        return array_keys($this->getValidConditions($automatable));
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @param mixed $conditionKey
      * @return boolean
      */
-    public function isValidCondition(Changeable $changeable, $conditionKey){
-        return in_array($conditionKey, $this->getValidConditionKeys($changeable));
+    public function isValidCondition(Automatable $automatable, $conditionKey){
+        return in_array($conditionKey, $this->getValidConditionKeys($automatable));
     }
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @param mixed $conditionKey
      * @return boolean
      */
-    public function isCappable(Changeable $changeable, $conditionKey)
+    public function isCappable(Automatable $automatable, $conditionKey)
     {
-        if( !$this->isValidCondition($changeable, $conditionKey) ){
-            $this->lastError = "The transition from " . $changeable->getStateKey().
+        if( !$this->isValidCondition($automatable, $conditionKey) ){
+            $this->lastError = "The transition from " . $automatable->getStateKey().
                 " with condition " .$conditionKey  . " not exists";
             return false;
         }
 
-        $transition = $this->transitionCollection->get($changeable->getStateKey(), $conditionKey);
+        $transition = $this->transitionCollection->get($automatable->getStateKey(), $conditionKey);
         foreach( $transition->getGuards() as $guard ){
             /* @var $guard \Automatic\Guard */
-            if( !$guard->isSafe($changeable) ){
+            if( !$guard->isSafe($automatable) ){
                 $this->lastError = $guard->getLastError();
                 return false;
             }
@@ -125,16 +125,16 @@ class Machine
 
     /**
      *
-     * @param Changeable $changeable
+     * @param Automatable $automatable
      * @param mixed $conditionKey
      */
-    public function handle(Changeable $changeable, $conditionKey, $variables = array())
+    public function handle(Automatable $automatable, $conditionKey, $variables = array())
     {
-        if( !$this->isCappable($changeable, $conditionKey) ){
+        if( !$this->isCappable($automatable, $conditionKey) ){
             throw new AutomataException($this->lastError);
         }
-        $transition = $this->transitionCollection->get($changeable->getStateKey(), $conditionKey);
-        $this->successHandler->apply($changeable, $transition, $variables);
+        $transition = $this->transitionCollection->get($automatable->getStateKey(), $conditionKey);
+        $this->successHandler->apply($automatable, $transition, $variables);
     }
 
 
