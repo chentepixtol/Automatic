@@ -126,6 +126,20 @@ class Machine
     /**
      *
      * @param Automatable $automatable
+     * @param unknown_type $conditionKey
+     * @return boolean
+     */
+    public function isCappableByConditionName(Automatable $automatable, $conditionName){
+        $conditionKey = array_search($conditionName, $this->transitionCollection->getConditions());
+        if( false === $conditionKey ){
+            throw new AutomataException("The condition {$conditionName} not exists.");
+        }
+        return $this->isCappable($automatable, $conditionKey);
+    }
+
+    /**
+     *
+     * @param Automatable $automatable
      * @param mixed $conditionKey
      */
     public function handle(Automatable $automatable, $conditionKey, $variables = array())

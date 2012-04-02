@@ -75,6 +75,21 @@ class GuardTest extends BaseTest
     /**
      * @test
      */
+    public function isCappableByName(){
+        $this->assertTrue($this->machine->isCappableByConditionName(new Item(self::ESTANTE, "Book"), "Prestar"));
+    }
+
+    /**
+     * @test
+     * @expectedException \Automatic\AutomataException
+     */
+    public function isCappableByNameConditionNotExists(){
+        $this->machine->isCappableByConditionName(new Item(self::ESTANTE, "Book"), "Robar");
+    }
+
+    /**
+     * @test
+     */
     public function handle(){
         $item = new Item(self::ESTANTE, "Book");
 
